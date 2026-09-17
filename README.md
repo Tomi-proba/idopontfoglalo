@@ -65,19 +65,33 @@ npm run dev
    - `NEXT_PUBLIC_APP_URL` = az éles domain (pl. `https://cetli.hu`)
    - `CRON_SECRET` = egy általad generált random string — ez védi a
      `/api/cron/*` végpontokat illetéktelen hívás ellen.
-3. A `vercel.json` már tartalmazza a két ütemezett feladatot:
-   - `/api/cron/send-reminders` — 15 percenként
-   - `/api/cron/check-trials` — naponta egyszer (08:00 UTC)
+3. A `vercel.json` két ütemezett feladatot tartalmaz, mindkettő **naponta
+   egyszer** fut (07:00 és 08:00 UTC) — ez szándékos: a Vercel **Hobby
+   (ingyenes)** csomag a beépített Cron Jobs-nál csak napi egyszeri
+   futtatást enged, bármi sűrűbb schedule-lal a deploy hibát dob és Pro
+   csomagra váltást kérne. Nem kell fizetős csomagra váltanod ahhoz, hogy
+   kipróbáld az alkalmazást.
 
-   **Fontos:** a Vercel **Hobby (ingyenes)** csomagon a beépített Cron Jobs
-   csak **naponta egyszer** futnak le, függetlenül attól, mit írsz a
-   `schedule` mezőbe — ez a Vercel platform korlátja, nem az alkalmazásé.
-   Ha 15 percenkénti emlékeztető-küldésre van szükséged (ajánlott), a
-   legegyszerűbb ingyenes megoldás egy külső ütemező, pl.
-   [cron-job.org](https://cron-job.org): állíts be nála egy 15 percenkénti
-   GET hívást a `https://<domained>/api/cron/send-reminders` címre, az
-   `Authorization: Bearer <CRON_SECRET>` fejléccel. (Vercel **Pro**
-   csomagon a beépített cron is tetszőleges gyakorisággal futtatható.)
+   **Ha most csak ki akarod próbálni:** nem kell várnod a napi cron-ra —
+   hívd meg kézzel a végpontot (böngészőben vagy `curl`-lal):
+
+   ```
+   curl -H "Authorization: Bearer <CRON_SECRET>" \
+     https://<domained>/api/cron/send-reminders
+   ```
+
+   Ez lefuttatja pontosan azt, amit a cron is futtatna: megkeresi az
+   esedékes emlékeztetőket, és kiküldi őket Resenden keresztül. Ha
+   `CRON_SECRET`-et nem állítottál be Vercel-en, a fejléc elhagyható.
+
+   **Ha később éles, 15 percenkénti automatikus küldést szeretnél** —
+   szintén ingyenesen, Vercel Pro nélkül —, használj egy külső ütemezőt,
+   pl. [cron-job.org](https://cron-job.org): állíts be nála egy 15
+   percenkénti GET hívást a `https://<domained>/api/cron/send-reminders`
+   címre, az `Authorization: Bearer <CRON_SECRET>` fejléccel. Ez a Vercel
+   cron-limittől független, mert nem a Vercel, hanem a cron-job.org hívja
+   meg az endpointot — a `vercel.json`-beli napi cronokat megtarthatod
+   tartalék/biztonsági hálóként.
 
 ## Mappastruktúra
 
