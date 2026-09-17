@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #ece6d6;
+  --paper-raised: #f8f4e7;
+  --paper-raised-2: #fbf8ef;
+  --ink: #2a241c;
+  --ink-soft: #6b6152;
+  --ink-faint: #948a78;
+  --stamp: #ae3a2c;
+  --stamp-soft: #e8cfc3;
+  --confirm: #3f6b52;
+  --confirm-soft: #d9e4d4;
+  --rule: #d5cbaf;
+  --rule-strong: #b9ac88;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1c1812;
+    --paper-raised: #262019;
+    --paper-raised-2: #2c251c;
+    --ink: #ece3d2;
+    --ink-soft: #b7aa92;
+    --ink-faint: #857a66;
+    --stamp: #e3705c;
+    --stamp-soft: #4a2a24;
+    --confirm: #7fb294;
+    --confirm-soft: #2a3b2e;
+    --rule: #3b3327;
+    --rule-strong: #5a4e38;
+  }
+}
+
+@theme {
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-paper-raised-2: var(--paper-raised-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-stamp: var(--stamp);
+  --color-stamp-soft: var(--stamp-soft);
+  --color-confirm: var(--confirm);
+  --color-confirm-soft: var(--confirm-soft);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-body: var(--font-source-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-hand: var(--font-caveat), cursive;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+::selection {
+  background: var(--stamp-soft);
+  color: var(--stamp);
+}
