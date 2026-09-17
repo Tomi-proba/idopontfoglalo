@@ -4,8 +4,11 @@ import { DemoSection } from "@/components/landing/demo-section";
 import { PricingSection } from "@/components/landing/pricing-section";
 import { SignupForm } from "@/components/landing/signup-form";
 import { Card } from "@/components/ui/card";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 export default function LandingPage() {
+  const configured = isSupabaseConfigured();
+
   return (
     <>
       <header className="py-5.5">
@@ -149,6 +152,12 @@ export default function LandingPage() {
               </ul>
             </div>
 
+            {!configured && (
+              <div className="mb-4 rounded-[3px] border border-dashed border-stamp bg-stamp-soft px-4 py-3 text-[13.5px] font-semibold text-stamp">
+                Ez a verzió még nincs összekötve az adatbázissal (Supabase) — a fiók
+                létrehozása egyelőre nem fog működni. Lásd a README-t a beállításhoz.
+              </div>
+            )}
             <Card className="p-0">
               <SignupForm />
             </Card>

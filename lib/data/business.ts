@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import type { Business } from "@/types/database";
 
 /**
@@ -9,6 +10,8 @@ import type { Business } from "@/types/database";
  * visszairányítjuk a bejelentkezéshez.
  */
 export async function getCurrentBusiness(): Promise<Business> {
+  if (!isSupabaseConfigured()) redirect("/bejelentkezes");
+
   const supabase = await createClient();
   const {
     data: { user },

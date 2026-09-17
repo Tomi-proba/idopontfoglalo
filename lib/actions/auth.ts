@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ensureBusinessForUser } from "@/lib/actions/business";
+import { isSupabaseConfigured, SUPABASE_NOT_CONFIGURED_MESSAGE } from "@/lib/supabase/config";
 
 export interface AuthActionState {
   error?: string;
@@ -26,6 +27,9 @@ export async function signUpAction(
   }
   if (loginMode === "password" && password.length < 8) {
     return { error: "A jelszó legalább 8 karakter legyen." };
+  }
+  if (!isSupabaseConfigured()) {
+    return { error: SUPABASE_NOT_CONFIGURED_MESSAGE };
   }
 
   const supabase = await createClient();
@@ -74,6 +78,9 @@ export async function signInAction(
   if (!email || !password) {
     return { error: "Add meg az email címed és a jelszavad." };
   }
+  if (!isSupabaseConfigured()) {
+    return { error: SUPABASE_NOT_CONFIGURED_MESSAGE };
+  }
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -88,6 +95,9 @@ export async function requestMagicLinkAction(
 ): Promise<AuthActionState> {
   const email = String(formData.get("email") ?? "").trim();
   if (!email) return { error: "Add meg az email címed." };
+  if (!isSupabaseConfigured()) {
+    return { error: SUPABASE_NOT_CONFIGURED_MESSAGE };
+  }
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithOtp({
