@@ -4,6 +4,14 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
 
+  // Konfiguráció nélkül (pl. első Vercel deploy, mielőtt a Supabase env
+  // változókat beállítottad) ne dőljön el az EGÉSZ oldal — a middleware
+  // minden kérésen lefut, tehát egy itt eldobott hiba a landing oldalt is
+  // magával rántaná. Ilyenkor egyszerűen átengedjük a kérést.
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return response;
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
